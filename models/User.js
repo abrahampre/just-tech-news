@@ -1,6 +1,7 @@
 const { Model, DataTypes} = require('sequelize');
 // nos estamos connectando a sequalize
 const sequelize = require('../config/connection');
+const bcrypt = require('bcrypt');
 
 //create our User model
 
@@ -12,33 +13,26 @@ User.init(
     {
         //define an id column
         id:{
-            //use special sequilize DataTypes object provide what tipe of data it is
-            type:DataTypes.INTEGER,
-            //this is the equivelant of sqls NOT NULL option
-            allowNull:false,
-
-            //instruct that this si the primary key
-            primaryKey: true,
+            type:DataTypes.INTEGER,//use special sequilize DataTypes object provide what tipe of data it is
+            allowNull:false,//this is the equivelant of sqls NOT NULL option
+            primaryKey: true, //instruct that this si the primary key
             autoIncrement:true
-
         },
-        //define username column
-        username:{
+        username:{//define username column
             type:DataTypes.STRING,
             allowNull: false
         },
-        //define email column
-        email:{
+        
+        email:{   //define email column
             type: DataTypes.STRING,
             
             allowNull: false,
 
-            //there cannot be a duplicate email values in this table
-            unique:true,
-            //iff allownull is set to false, we can run our data through validator 
-            // before creating a table data
-            validate: {
-                isEmail:true
+            
+            unique:true,//there cannot be a duplicate email values in this table
+           
+            validate: {      //iff allownull is set to false, we can run our data through validator 
+                isEmail:true   // before creating a table data
             }
         },
         password:{
@@ -52,6 +46,20 @@ User.init(
         }
     },
     {
+        hooks:{
+            //set up beforeCreate lifecycle "hook" functionality
+            async beforeCreate(newUserData){
+                newUserData.password = await bcrypt.hash(newUserData.password,10)
+                return newUserData;
+            },
+            //set up before udpate lifescycle 
+            async beforeUpdate(updatedUserData){
+                updatedUserData.password = await bcrypt.hash(updatedUserData.password,10);
+                return updatedUserData;
+            }
+        },
+
+        
         //TABLE CONFIGURATION OPTIONS GO HERE (https://sequelize.org/v5/manual/models-definition.html#configuration))()
 
         //pass in our imported sequelize connection (the direct connection to our database)
