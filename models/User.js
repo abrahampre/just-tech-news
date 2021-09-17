@@ -5,7 +5,13 @@ const bcrypt = require('bcrypt');
 
 //create our User model
 
-class User extends Model {}
+class User extends Model {
+
+    //set up methond to run on instance data (per user) to check password
+    checkPassword(loginPw){
+        return bcrypt.compareSync(loginPw, this.password)
+    }
+}
 
 //define table columns and configuration
 
@@ -47,12 +53,12 @@ User.init(
     },
     {
         hooks:{
-            //set up beforeCreate lifecycle "hook" functionality
-            async beforeCreate(newUserData){
+            //set up beforeCreate lifecycle "hook" functionality to create the hash on the new password
+            async beforeCreate(newUserData){ 
                 newUserData.password = await bcrypt.hash(newUserData.password,10)
                 return newUserData;
             },
-            //set up before udpate lifescycle 
+            //set up before udpate lifescycle  to crate has in the updated password
             async beforeUpdate(updatedUserData){
                 updatedUserData.password = await bcrypt.hash(updatedUserData.password,10);
                 return updatedUserData;
