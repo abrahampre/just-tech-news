@@ -1,11 +1,13 @@
 const router = require('express').Router();
-//estamos agarrando la infomracion del modelo se esta
+//estamos agarrando la infomracion del modelo se
 const {User} =require('../../models');
 
 //GET /api/users
 router.get('/',(req,res)=>{
     //acces our USER model and run .findAll()method)
-    User.findAll()
+    User.findAll({
+        attributes:{exclude:['password']}
+    })
     .then(dbUserData =>res.json(dbUserData))
     .catch(err=>{
         console.log(err);
@@ -17,6 +19,7 @@ router.get('/',(req,res)=>{
 router.get('/:id',(req,res)=>{
     User.findOne({
         where:{
+            attribues: {exclude:'password'},
             id:req.params.id
         }
     })

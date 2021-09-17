@@ -1,4 +1,4 @@
-const { Model, DataTypes} = require ('sequelize');
+const { Model, DataTypes} = require('sequelize');
 // nos estamos connectando a sequalize
 const sequelize = require('../config/connection');
 
@@ -18,7 +18,8 @@ User.init(
             allowNull:false,
 
             //instruct that this si the primary key
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement:true
 
         },
         //define username column
