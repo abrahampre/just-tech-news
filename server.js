@@ -18,3 +18,4 @@ app.use(routes);
 sequalize.sync({force:true}).then(()=>{
     app.listen(PORT,() => console.log('Now Listening'))
 })
+
