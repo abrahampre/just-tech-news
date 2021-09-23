@@ -1,10 +1,10 @@
 function signupFormHandler(event) {
     event.preventDefault();
-  
+    console.log("function is working!!!!!!!!")
     const username = document.querySelector('#username-signup').value.trim();
     const email = document.querySelector('#email-signup').value.trim();
     const password = document.querySelector('#password-signup').value.trim();
-    debugger;
+    
     if (username && email && password) {
       fetch('/api/users', {
         method: 'post',
@@ -13,7 +13,11 @@ function signupFormHandler(event) {
           email,
           password
         }),
+
+        
         headers: { 'Content-Type': 'application/json' }
       }).then((response) => {console.log(response)})
     }
 }
+
+document.querySelector('.signup-form').addEventListener('submit', signupFormHandler);
